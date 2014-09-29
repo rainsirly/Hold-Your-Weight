@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<style type="text/css">
+		.line { fill: none; }	
+		#tooltip {
+			position: absolute;
+			width: 200px;
+			height: auto;
+			padding: 10px;
+			background-color: white;
+			-webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+			-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+			box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+			pointer-events: none;
+		}
+		#tooltip.hidden {
+			display: none;
+		}
+		#tooltip p {
+			margin: 0;
+			font-family: sans-serif;
+		}
+		#tooltip .title {
+			text-decoration: underline;
+		}
+		.commit-circle, .legend-circle {
+			stroke-width: 0.22em;
+		}
+		.commit-circle.selected, .legend-circle.selected {
+			stroke-width: 0.40em;
+		}
+	</style>	
+</head>
+<body>
+	<div id="custom-dates">
+		<h1>Hold you weight with the line</h1>	
+	</div>
+	<div id="tooltip" class="hidden">
+		<p class="title"></p>
+		<p class="desc"></p>
+		<ul class="values"></ul>
+	</div> 
+    <div>
+    <select id="sel_who">
+        <option>ZZY</option>
+        <option>CLIN4</option>
+        <option>HSU2</option>
+        <option>YMENG3</option>
+        <option>Farid</option>
+        <option>XRui</option>
+        <option>YLei3</option>
+        <option>KXIAO</option>
+        <option>XWANG32</option>
+        <option>SSu</option>
+        <option>Xiao Ying</option>
+		<option>ZLi26</option>
+        <option>pLu</option>
+    </select> 
+    <input name="" type="text" id= "datatxt">
+    <input type="button" value="Add" onclick="Add_Data();"/>
+    </div>
+
+<script type="text/javascript" src="./d3.js" charset="utf-8"></script>
+<script type="text/javascript" src="./d3-line-chart.js" charset="utf-8"></script>
+<script type="text/javascript">
+    var data = [
+     {
+         name: 'ZZY',
+         values: [{ x: "04/06/2014", y: 77.7 }, { x: "09/06/2014", y: 78.3 }, { x: "23/06/2014", y: 77.8 },{ x: "24/06/2014", y: 77.4 },{ x: "26/06/2014", y: 77.3 },{ x: "30/06/2014", y: 77.7 }]
+     },
+     {
+         name: 'YMENG3',
+         values: [{ x: "04/06/2014", y: 76.9 }, { x: "09/06/2014", y: 76.2 }, { x: "23/06/2014", y: 77.5 }, { x: "26/06/2014", y: 76.4 }, { x: "30/06/2014", y: 76.2 }]
+     },
+     {
+         name: 'CLIN4',
+         values: [{ x: "04/06/2014", y: 94.2 }, { x: "07/06/2014", y: 93.8 }, { x: "09/06/2014", y: 93.3 },{ x: "19/06/2014", y: 94.8 },{ x: "23/06/2014", y: 94.7 },{ x: "26/06/2014", y: 93.9 },{ x: "30/06/2014", y: 95.9 }]
+     },
+     {
+         name: 'HSU2',
+         values: [{ x: "04/06/2014", y: 69.1 }, { x: "09/06/2014", y: 69.1 }, { x: "19/06/2014", y: 68.9 },{ x: "23/06/2014", y: 69 },{ x: "24/06/2014", y: 69.1 },{ x: "26/06/2014", y: 68.7 },{ x: "30/06/2014", y: 69.4 }]
+     },
+     {
+         name: 'Farid',
+         values: [{ x: "04/06/2014", y: 65.4 }, { x: "19/06/2014", y: 66.0 }, { x: "30/06/2014", y: 65.1 }]
+     },
+     {
+         name: 'XRui',
+         values: [{ x: "04/06/2014", y: 57.2 }, { x: "09/06/2014", y: 55.4 }, { x: "19/06/2014", y: 55.9 }, { x: "23/06/2014", y: 56.0 }, { x: "26/06/2014", y: 56.4 }, { x: "30/06/2014", y: 57.1 }]
+     },
+     {
+         name: 'YLei3',
+         values: [{ x: "04/06/2014", y: 65.0 }, { x: "09/06/2014", y: 64.5 }, { x: "19/06/2014", y: 64.2 }, { x: "23/06/2014", y: 63.8 }, { x: "26/06/2014", y: 64.5 }, { x: "30/06/2014", y: 65.2 }]
+     },
+     {
+         name: 'KXIAO',
+         values: [{ x: "04/06/2014", y: 47.2 }, { x: "19/06/2014", y: 48 }, { x: "23/06/2014", y: 47.7 }, { x: "24/06/2014", y: 47.6 }]
+     },
+     {
+         name: 'XWANG32',
+         values: [{ x: "04/06/2014", y: 47.8 }, { x: "19/06/2014", y: 47.7 }, { x: "24/06/2014", y: 47.8 }, { x: "26/06/2014", y: 48.1 }, { x: "30/06/2014", y: 48.1 }]
+     },
+     {
+         name: 'SSu',
+         values: [{ x: "07/06/2014", y: 71.9 }, { x: "30/06/2014", y: 72.7 }]
+     },
+     {
+         name: 'Xiao Ying',
+         values: [{ x: "07/06/2014", y: 50.0 }, { x: "09/06/2014", y: 49.4 }, { x: "19/06/2014", y: 50.0 }]
+     },
+     {
+         name: 'ZLi26',
+         values: [{ x: "21/07/2014", y: 55.4 }]
+     },
+     {
+         name: 'pLu',
+         values: [{ x: "22/07/2014", y: 55.7 }]
+     }
+    ];
+    function Add_Data() {
+        var selobj = document.getElementById("sel_who");
+        var index = selobj.selectedIndex;
+        var name = selobj.options[index].text;
+        var txtobj = document.getElementById("datatxt");
+        var weight = txtobj.value;
+        for (x in data) {
+            if (data[x].name == name) {
+				var newdata = "";
+				var olddata = localStorage.getItem(data[x].name);
+				var todaydate = Get_Today_Date();
+				var adddata = todaydate + "+" + weight;
+				if(olddata != null)
+				{
+					var dateandweight = olddata.split(";");
+					for(element in dateandweight)
+					{
+						var tmpdata = dateandweight[element];
+						if(tmpdata != null)
+						{
+							var date = tmpdata.split("+")[0];
+							if(todaydate == date)
+							{
+								newdata = olddata.replace(dateandweight[element],adddata);
+								localStorage.setItem(data[x].name, newdata);
+								window.location.reload();
+								return;
+							}
+						}
+					}
+					newdata = olddata + ";" + adddata;
+					localStorage.setItem(data[x].name, newdata);
+				}
+				else
+				{
+					newdata += adddata;
+					localStorage.setItem(data[x].name, newdata);
+				}
+				//alert("new data: "+newdata);
+            }
+        }
+        window.location.reload();
+    }
+	
+    function Update_Data() {
+        for (x in data) {
+			var olddata = localStorage.getItem(data[x].name);
+			if(olddata != null)
+			{
+				var dateandweight = olddata.split(";");
+				for (element in dateandweight)
+				{
+					if(dateandweight[element] == null)
+						continue;
+					var date = dateandweight[element].split("+")[0];
+					var weight = dateandweight[element].split("+")[1];
+					//alert(date +"," +weight);
+					data[x].values.push({x: date, y: weight})
+				}
+				//alert(data[x].values);
+			}
+			else
+				continue;
+        }
+    }
+    function Get_Today_Date() {
+        var currentDate = "";
+        var myDate = new Date();
+        currentDate = currentDate + myDate.getDate() + "/" + (myDate.getMonth()+1) + "/" + myDate.getFullYear();
+        //alert(currentDate);
+        return currentDate;
+    }
+
+  //data0.values.push({ x: "16/04/2014", y: 35 });
+  var lc = new LineChart({
+    graph_width: 1860,
+    graph_height: 800,
+    margin: {top: 50, right: 100, bottom: 30, left: 100},
+    x_axis_text: "Date",
+    y_axis_text: "Weight",
+  	parent: '#custom-dates',
+  	x_parse: d3.time.format("%d/%m/%Y").parse,
+  	x_scale: d3.time.scale(),
+  	all_series: data
+  });
+  Update_Data();
+  lc.plot();
+</script>
+</body>
+</html>
